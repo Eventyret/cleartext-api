@@ -6,12 +6,15 @@ router = APIRouter()
 
 
 class RewriteRequest(BaseModel):
+    """Request payload with the text to rewrite and desired style."""
+
     text: str
     style: str = "simple"
 
     @field_validator("style")
     @classmethod
     def validate_style(cls, v: str) -> str:
+        """Ensure style is either 'simple' or 'formal'."""
         if v not in {"simple", "formal"}:
             raise ValueError("style must be 'simple' or 'formal'")
         return v
@@ -19,6 +22,11 @@ class RewriteRequest(BaseModel):
 
 @router.post("/")
 async def rewrite_text(req: RewriteRequest):
+    """
+    Rewrite the input text using the specified style.
+
+    Style can be 'simple' or 'formal'.
+    """
     try:
         return await rewrite(req.text, req.style)
     except ValueError as e:

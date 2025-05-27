@@ -7,11 +7,14 @@ router = APIRouter()
 
 
 class LanguageDetectRequest(BaseModel):
+    """Request body containing the text to detect language from."""
+
     text: str
 
     @field_validator("text")
     @classmethod
     def validate_text(cls, v: str) -> str:
+        """Ensure the input text is not empty or whitespace-only."""
         if not v.strip():
             raise ValueError("Text cannot be empty")
         return v
@@ -19,13 +22,18 @@ class LanguageDetectRequest(BaseModel):
 
 @router.post("/")
 async def language_detect(req: LanguageDetectRequest):
+    """
+    Detect the language of the given input text.
+
+    Returns a language code (e.g., 'en', 'fr').
+    """
     try:
         language = detect_language(req.text)
 
         if language == "unknown":
             raise HTTPException(
                 status_code=422,
-                detail="Could not determine language try providing more text",
+                detail="Could not determine language. Try providing more text.",
             )
 
         return {"language": language}
@@ -34,7 +42,7 @@ async def language_detect(req: LanguageDetectRequest):
         raise HTTPException(status_code=422, detail=str(e))
 
     except HTTPException as e:
-        raise e  # Don't double-wrap
+        raise e
 
     except LangDetectException:
         raise HTTPException(
