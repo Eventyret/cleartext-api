@@ -1,3 +1,5 @@
+import asyncio
+import random
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
@@ -23,8 +25,14 @@ app = FastAPI(
 
 
 @app.get("/", include_in_schema=False)
-def block_root():
-    return PlainTextResponse("Not found", status_code=404)
+async def block_root():
+    await asyncio.sleep(random.uniform(0.05, 0.2))  # Anti-probe jitter
+    headers = {
+        "X-Robots-Tag": "noindex, nofollow",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+    }
+    return PlainTextResponse("Not found", status_code=404, headers=headers)
 
 
 app.add_middleware(
