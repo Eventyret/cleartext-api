@@ -45,3 +45,16 @@ uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
+
+## 🧪 Example Usage
+
+### `POST /summarize`
+
+Request:
+
+```json
+{
+  "text": "FastAPI is a modern Python framework for building APIs.",
+  "length": "short"
+}
+```
