@@ -1,15 +1,5 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
-from app.services.llm_provider import summarize
+from app.api.endpoints import summarize
 
 api_router = APIRouter()
-
-
-class SummarizeRequest(BaseModel):
-    text: str
-    length: str = "short"
-
-
-@api_router.post("/summarize")
-async def summarize_text(req: SummarizeRequest):
-    return await summarize(req.text, req.length)
+api_router.include_router(summarize.router, prefix="/summarize", tags=["Summarize"])
