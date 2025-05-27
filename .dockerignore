@@ -1,0 +1,35 @@
+# Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+.venv/
+env/
+venv/
+
+# Git and editor files
+.git
+.gitignore
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Test files
+tests/
+*.coverage
+coverage.xml
+htmlcov/
+
+# Docs / cache
+*.log
+.DS_Store
+*.egg-info/
+*.pytest_cache/
+.mypy_cache/
+.tox/
+.idea/
+.vscode/
