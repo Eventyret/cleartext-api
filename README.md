@@ -20,7 +20,7 @@ This project is being developed as part of a backend coding test. It reflects be
   - [x] `/summarize`
   - [x] `/rewrite`
   - [ ] `/title`
-  - [ ] `/language-detect`
+  - [x] `/language-detect`
 - [ ] Unit tests for endpoints
 - [ ] Dockerfile for deployment
 - [ ] Reflection of tech choices
@@ -70,6 +70,20 @@ Request:
 }
 ```
 
+### `POST /language-detect`
+
+Request:
+
+```json
+{
+  "text": "Hola, ¿cómo estás?"
+}
+{
+  "language": "es"
+}
+
+```
+
 The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
 
 - [Swagger UI (interactive)](http://localhost:8000/docs)
@@ -80,3 +94,7 @@ The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
 - `POST /summarize` — Generate a short or long summary
 - `POST /rewrite` — Rewrite text in a simple or formal tone
 - `POST /language-detect` — (Coming soon)
+
+```
+
+```
