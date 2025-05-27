@@ -1,18 +1,23 @@
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 from app.main import app
 
 client = TestClient(app)
 
 
 def test_rewrite_endpoint():
-    response = client.post(
-        "/rewrite/",
-        json={"text": "Could you provide me with assistance?", "style": "simple"},
-    )
-    assert response.status_code == 200
-    json_data = response.json()
-    assert "rewritten" in json_data
-    assert "provider" in json_data
+    with patch(
+        "app.api.endpoints.rewrite.rewrite",
+        return_value={"rewritten": "Can you help me?", "provider": "mock"},
+    ):
+        response = client.post(
+            "/rewrite/",
+            json={"text": "Could you provide me with assistance?", "style": "simple"},
+        )
+        assert response.status_code == 200
+        json_data = response.json()
+        assert json_data["rewritten"] == "Can you help me?"
+        assert json_data["provider"] == "mock"
 
 
 def test_rewrite_invalid_style():
