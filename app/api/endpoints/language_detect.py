@@ -25,7 +25,7 @@ async def language_detect(req: LanguageDetectRequest):
         if language == "unknown":
             raise HTTPException(
                 status_code=422,
-                detail="Could not determine language — try providing more text",
+                detail="Could not determine language try providing more text",
             )
 
         return {"language": language}

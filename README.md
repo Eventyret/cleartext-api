@@ -6,7 +6,7 @@ A small, high-performance API built with FastAPI for language-related tasks like
 
 ## 🚧 Work In Progress
 
-This project is being developed as part of a backend coding test. It reflects best practices around structure, security, and maintainability — while staying within a focused scope.
+This project is being developed as part of a backend coding test. It reflects best practices around structure, security, and maintainability - while staying within a focused scope.
 
 ---
 
@@ -19,7 +19,7 @@ This project is being developed as part of a backend coding test. It reflects be
 - [ ] Endpoints for:
   - [x] `/summarize`
   - [x] `/rewrite`
-  - [ ] `/title`
+  - [ ] `/title` (planned but scoped out for now)
   - [x] `/language-detect`
 - [ ] Unit tests for endpoints
 - [ ] Dockerfile for deployment
@@ -91,9 +91,10 @@ The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
 
 ## 🔌 Available Endpoints
 
-- `POST /summarize` — Generate a short or long summary
-- `POST /rewrite` — Rewrite text in a simple or formal tone
-- `POST /language-detect` — (Coming soon)
+- `POST /summarize` - Generate a short or long summary
+- `POST /rewrite` - Rewrite text in a simple or formal tone
+- `POST /language-detect`
+  `POST /title` - Planned: auto-generate a short, catchy title from longer text
 
 ```
 
