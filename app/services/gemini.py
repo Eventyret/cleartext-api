@@ -29,3 +29,19 @@ async def rewrite(text: str, style: str = "simple", variant: str = "2.5") -> str
     prompt = f"Rewrite the following text in a more {style} tone:\n\n{text}"
     response = model.generate_content(prompt)
     return response.text.strip()
+
+
+async def generate_title(text: str, variant: str = "2.5") -> str:
+    prompt = f"""
+Generate a concise and engaging title for the following content:
+
+{text.strip()}
+
+Title:
+"""
+    model = _models.get(variant)
+    if not model:
+        raise ValueError(f"Unknown Gemini model variant: {variant}")
+
+    response = model.generate_content(prompt)
+    return response.text.strip().strip('"')

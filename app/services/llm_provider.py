@@ -61,3 +61,25 @@ async def rewrite(text: str, style: str = "simple") -> dict:
             continue
 
     raise HTTPException(status_code=503, detail="All providers failed")
+
+
+async def generate_title(text: str) -> str:
+    """
+    Generate a title for the given text using a fallback chain of Gemini models.
+
+    Tries gemini-2.5 first, then gemini-1.5 if it fails. Raises HTTPException 503 if all fail.
+    """
+    fallback_chain = [
+        ("gemini-2.5", lambda: gemini.generate_title(text, variant="2.5")),
+        ("gemini-1.5", lambda: gemini.generate_title(text, variant="1.5")),
+    ]
+
+    for provider, fn in fallback_chain:
+        try:
+            return await fn()
+        except Exception:
+            continue
+
+    raise HTTPException(
+        status_code=503, detail="All providers failed to generate a title"
+    )
