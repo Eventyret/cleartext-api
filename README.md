@@ -17,8 +17,8 @@ This project is being developed as part of a backend coding test. It reflects be
 - [x] Environment-based configuration with `.env`
 - [x] Rate limiting and basic security measures
 - [ ] Endpoints for:
-  - [ ] `/summarize`
-  - [ ] `/rewrite`
+  - [x] `/summarize`
+  - [x] `/rewrite`
   - [ ] `/title`
   - [ ] `/language-detect`
 - [ ] Unit tests for endpoints
@@ -58,3 +58,25 @@ Request:
   "length": "short"
 }
 ```
+
+### `POST /rewrite`
+
+Request:
+
+```json
+{
+  "text": "Could you please assist me with this?",
+  "style": "simple"
+}
+```
+
+The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
+
+- [Swagger UI (interactive)](http://localhost:8000/docs)
+- [ReDoc (minimal)](http://localhost:8000/redoc)
+
+## 🔌 Available Endpoints
+
+- `POST /summarize` — Generate a short or long summary
+- `POST /rewrite` — Rewrite text in a simple or formal tone
+- `POST /language-detect` — (Coming soon)
