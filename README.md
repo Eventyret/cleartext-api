@@ -2,43 +2,27 @@
 
 A small, high-performance API built with FastAPI for language-related tasks like summarization, rewriting, and language detection. The goal is to provide a secure, async-first, and extensible service that interacts with a large language model (Google Gemini) in a clean and scalable way.
 
----
-
-## 🚧 Work In Progress
-
-This project is being developed as part of a backend coding test. It reflects best practices around structure, security, and maintainability - while staying within a focused scope.
-
----
-
 ## ✅ Goals
 
 - [x] Async FastAPI app with strong typing
 - [x] OpenAPI documentation via `/docs`
 - [x] Environment-based configuration with `.env`
 - [x] Rate limiting and basic security measures
-- [ ] Endpoints for:
-  - [x] `/summarize`
-  - [x] `/rewrite`
-  - [ ] `/title` (planned but scoped out for now)
-  - [x] `/language-detect`
+- [x] Dockerfile for deployment
 - [ ] Unit tests for endpoints
-- [ ] Dockerfile for deployment
 - [ ] Reflection of tech choices
-
----
+- [ ] `/title` endpoint (planned but scoped out for now)
 
 ## 📦 Stack
 
 - FastAPI (async + type-safe)
-- Python 3.11
+- Python 3.11+
 - Google Generative AI (Gemini)
 - `langdetect` for language classification
 - `slowapi` for rate limiting
-- `uv` for fast dependency and virtualenv management
+- `uv` for dependency and virtualenv management
 
----
-
-## 🔧 Setup
+## 🔧 Local Setup
 
 ```bash
 uv venv
@@ -46,11 +30,35 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
+To run locally:
+
+```bash
+make run
+```
+
+## 🐳 Docker Support
+
+### Production
+
+Minimal, secure, multistage Alpine build using a non-root user:
+
+```bash
+docker build -t clear-text-api .
+docker run -p 8000:8000 clear-text-api
+```
+
+### Development
+
+Includes hot reload support via `--reload`:
+
+```bash
+docker build -f Dockerfile.dev -t clear-text-api-dev .
+docker run -p 8000:8000 clear-text-api-dev
+```
+
 ## 🧪 Example Usage
 
 ### `POST /summarize`
-
-Request:
 
 ```json
 {
@@ -61,8 +69,6 @@ Request:
 
 ### `POST /rewrite`
 
-Request:
-
 ```json
 {
   "text": "Could you please assist me with this?",
@@ -72,34 +78,30 @@ Request:
 
 ### `POST /language-detect`
 
-Request:
-
 ```json
-Request:
 {
-  "text": "Hola, ¿cómo estás?"
+  "text": "Hola, ¿como estás?"
 }
+```
 
 Response:
+
+```json
 {
   "language": "es"
 }
-
 ```
 
-To explore the API interactively:
-
-- Run the server: `uvicorn app.main:app --reload`
-- Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
-
-- [Swagger UI (interactive)](http://localhost:8000/docs)
-- [ReDoc (minimal)](http://localhost:8000/redoc)
-
-## 🔌 Available Endpoints
+## 🔐 Available Endpoints
 
 - `POST /summarize` - Generate a short or long summary
 - `POST /rewrite` - Rewrite text in a simple or formal tone
 - `POST /language-detect` - Detect the language of a given text
-- `POST /title` - Planned: auto-generate a short, catchy title from longer text
+- `POST /title` - _(Planned)_ Auto-generate a catchy title
+
+## 🗺️ API Docs
+
+Run locally and access:
+
+- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
