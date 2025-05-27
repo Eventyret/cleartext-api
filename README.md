@@ -75,14 +75,22 @@ Request:
 Request:
 
 ```json
+Request:
 {
   "text": "Hola, ¿cómo estás?"
 }
+
+Response:
 {
   "language": "es"
 }
 
 ```
+
+To explore the API interactively:
+
+- Run the server: `uvicorn app.main:app --reload`
+- Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
 
@@ -93,9 +101,5 @@ The API is self-documented using FastAPI's built-in Swagger UI and ReDoc:
 
 - `POST /summarize` - Generate a short or long summary
 - `POST /rewrite` - Rewrite text in a simple or formal tone
-- `POST /language-detect`
-  `POST /title` - Planned: auto-generate a short, catchy title from longer text
-
-```
-
-```
+- `POST /language-detect` - Detect the language of a given text
+- `POST /title` - Planned: auto-generate a short, catchy title from longer text
