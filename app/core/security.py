@@ -1,10 +1,11 @@
+"""Security utilities for internal API protection."""
+
 from fastapi import Header, HTTPException, status
 from app.core.config import settings
 
 
 def verify_internal_api_key(x_api_key: str = Header(default=None, alias="x-api-key")):
-    """
-    Dependency to verify requests contain a valid internal API key.
+    """Dependency to verify requests contain a valid internal API key.
 
     Args:
         x_api_key (str): The API key from the `x-api-key` header.

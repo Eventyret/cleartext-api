@@ -13,5 +13,8 @@ test:
 lint:
 	ruff check .
 
+docstyle:
+	pydocstyle --convention=google app/
+
 format:
 	ruff format .
