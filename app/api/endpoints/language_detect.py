@@ -22,7 +22,7 @@ class LanguageDetectRequest(BaseModel):
         return v
 
 
-@router.post("/")
+@router.post("")
 async def language_detect(req: LanguageDetectRequest):
     """Detect language of the provided input using langdetect.
 

@@ -27,7 +27,7 @@ class TitleResponse(BaseModel):
     title: str
 
 
-@router.post("/", response_model=TitleResponse)
+@router.post("", response_model=TitleResponse)
 async def title_route(payload: TitleRequest):
     """Generate a title for the given text using provider fallback chain.
 

@@ -22,7 +22,7 @@ class SummarizeRequest(BaseModel):
         return v
 
 
-@router.post("/")
+@router.post("")
 async def summarize_text(req: SummarizeRequest):
     """Summarize text using the selected or fallback LLM provider.
 

@@ -22,7 +22,7 @@ class RewriteRequest(BaseModel):
         return v
 
 
-@router.post("/")
+@router.post("")
 async def rewrite_text(req: RewriteRequest):
     """Rewrite text into a different tone using LLM provider chain.
 
