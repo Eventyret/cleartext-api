@@ -1,8 +1,8 @@
 """Main application entry point for the Cleartext API."""
 
 import asyncio
+import logging
 import random
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 from slowapi import Limiter
@@ -10,9 +10,12 @@ from slowapi.util import get_remote_address
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
-from app.core.config import Settings
+from app.core.config import settings
+from app.core.logging import setup_logging
 
-load_dotenv()
+log_level = logging.DEBUG if settings.ENV == "development" else logging.INFO
+setup_logging(level=log_level)
+
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -20,9 +23,9 @@ app = FastAPI(
     title="Cleartext API",
     description="A language-processing API with summarization, rewriting, and language detection.",
     version="1.0.0",
-    docs_url="/docs" if Settings.docs_enabled else None,
-    redoc_url="/redoc" if Settings.docs_enabled else None,
-    openapi_url="/openapi.json" if Settings.docs_enabled else None,
+    docs_url="/docs" if settings.docs_enabled else None,
+    redoc_url="/redoc" if settings.docs_enabled else None,
+    openapi_url="/openapi.json" if settings.docs_enabled else None,
 )
 
 
