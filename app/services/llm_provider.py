@@ -1,85 +1,57 @@
-from app.services import gemini
 from fastapi import HTTPException
+from app.core.config import settings
+from app.services.llm import gemini, openai
+
+
+async def fallback_chain(operations):
+    for provider, fn in operations:
+        try:
+            return await fn(), provider
+        except Exception:
+            continue
+    raise HTTPException(status_code=503, detail="All providers failed")
 
 
 async def summarize(text: str, length: str = "short") -> dict:
-    """
-    Summarizes text using a fallback chain of LLM providers.
+    chain = []
 
-    Args:
-        text (str): The content to summarize.
-        length (str): 'short' or 'long' summary output.
+    if settings.LLM_PROVIDER == "gemini":
+        chain += [
+            ("gemini-2.5", lambda: gemini.summarize(text, length, "2.5")),
+            ("gemini-1.5", lambda: gemini.summarize(text, length, "1.5")),
+        ]
+    if settings.OPENAI_API_KEY:
+        chain.append(("openai", lambda: openai.summarize(text, length)))
 
-    Returns:
-        dict: A structured response with summary and provider info.
-    """
-
-    fallback_chain = [
-        ("gemini-2.5", lambda: gemini.summarize(text, length, variant="2.5")),
-        ("gemini-1.5", lambda: gemini.summarize(text, length, variant="1.5")),
-    ]
-
-    for provider, fn in fallback_chain:
-        try:
-            result = await fn()
-            return {
-                "summary": result,
-                "provider": provider,
-                "fallback_used": provider != fallback_chain[0][0],
-            }
-        except Exception:
-            continue
-
-    raise HTTPException(status_code=503, detail="All providers failed")
+    result, provider = await fallback_chain(chain)
+    return {"summary": result, "provider": provider}
 
 
 async def rewrite(text: str, style: str = "simple") -> dict:
-    """
-    Rewrites text using the specified style. Falls back across Gemini 2.5 and 1.5.
+    chain = []
 
-    Args:
-        text (str): The original text to rewrite.
-        style (str): The desired style, either 'simple' or 'formal'.
+    if settings.LLM_PROVIDER == "gemini":
+        chain += [
+            ("gemini-2.5", lambda: gemini.rewrite(text, style, "2.5")),
+            ("gemini-1.5", lambda: gemini.rewrite(text, style, "1.5")),
+        ]
+    if settings.OPENAI_API_KEY:
+        chain.append(("openai", lambda: openai.rewrite(text, style)))
 
-    Returns:
-        dict: A structured response with the rewritten text and provider info.
-    """
-    fallback_chain = [
-        ("gemini-2.5", lambda: gemini.rewrite(text, style, variant="2.5")),
-        ("gemini-1.5", lambda: gemini.rewrite(text, style, variant="1.5")),
-    ]
-
-    for provider, fn in fallback_chain:
-        try:
-            result = await fn()
-            return {
-                "rewritten": result,
-                "provider": provider,
-                "fallback_used": provider != fallback_chain[0][0],
-            }
-        except Exception:
-            continue
-
-    raise HTTPException(status_code=503, detail="All providers failed")
+    result, provider = await fallback_chain(chain)
+    return {"rewritten": result, "provider": provider}
 
 
 async def generate_title(text: str) -> str:
-    """
-    Generate a title for the given text using a fallback chain of Gemini models.
+    chain = []
 
-    Tries gemini-2.5 first, then gemini-1.5 if it fails. Raises HTTPException 503 if all fail.
-    """
-    fallback_chain = [
-        ("gemini-2.5", lambda: gemini.generate_title(text, variant="2.5")),
-        ("gemini-1.5", lambda: gemini.generate_title(text, variant="1.5")),
-    ]
+    if settings.LLM_PROVIDER == "gemini":
+        chain += [
+            ("gemini-2.5", lambda: gemini.generate_title(text, "2.5")),
+            ("gemini-1.5", lambda: gemini.generate_title(text, "1.5")),
+        ]
+    if settings.OPENAI_API_KEY:
+        chain.append(("openai", lambda: openai.generate_title(text)))
 
-    for provider, fn in fallback_chain:
-        try:
-            return await fn()
-        except Exception:
-            continue
-
-    raise HTTPException(
-        status_code=503, detail="All providers failed to generate a title"
-    )
+    result, _ = await fallback_chain(chain)
+    return result

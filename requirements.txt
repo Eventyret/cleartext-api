@@ -5,6 +5,7 @@ certifi==2025.4.26
 charset-normalizer==3.4.2
 click==8.2.1
 deprecated==1.2.18
+distro==1.9.0
 fastapi==0.115.12
 google-ai-generativelanguage==0.6.15
 google-api-core==2.24.2
@@ -22,8 +23,10 @@ httptools==0.6.4
 httpx==0.28.1
 idna==3.10
 iniconfig==2.1.0
+jiter==0.10.0
 langdetect==1.0.9
 limits==5.2.0
+openai==1.82.0
 packaging==25.0
 pluggy==1.6.0
 proto-plus==1.26.1
@@ -34,6 +37,7 @@ pydantic==2.11.5
 pydantic-core==2.33.2
 pyparsing==3.2.3
 pytest==8.3.5
+pytest-asyncio==1.0.0
 python-dotenv==1.1.0
 pyyaml==6.0.2
 requests==2.32.3
