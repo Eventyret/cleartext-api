@@ -1,3 +1,5 @@
+"""Endpoint for summarizing input text."""
+
 from fastapi import APIRouter, HTTPException
 from app.services.llm_provider import summarize
 from pydantic import BaseModel, field_validator
@@ -22,10 +24,13 @@ class SummarizeRequest(BaseModel):
 
 @router.post("/")
 async def summarize_text(req: SummarizeRequest):
-    """
-    Summarize the input text using the selected length.
+    """Summarize text using the selected or fallback LLM provider.
 
-    Length can be 'short' or 'long'.
+    Args:
+        payload (SummarizeRequest): Input text and summary length.
+
+    Returns:
+        dict: A JSON response with summary, provider, and fallback info.
     """
     try:
         return await summarize(req.text, req.length)

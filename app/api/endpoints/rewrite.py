@@ -1,3 +1,5 @@
+"""Endpoint for rewriting input text in a different style."""
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, field_validator
 from app.services.llm_provider import rewrite
@@ -22,10 +24,13 @@ class RewriteRequest(BaseModel):
 
 @router.post("/")
 async def rewrite_text(req: RewriteRequest):
-    """
-    Rewrite the input text using the specified style.
+    """Rewrite text into a different tone using LLM provider chain.
 
-    Style can be 'simple' or 'formal'.
+    Args:
+        payload (RewriteRequest): Input text and desired style.
+
+    Returns:
+        dict: A JSON response with rewritten text and provider info.
     """
     try:
         return await rewrite(req.text, req.style)

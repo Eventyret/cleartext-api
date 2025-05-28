@@ -1,3 +1,5 @@
+"""API router that aggregates all endpoint routes."""
+
 from fastapi import APIRouter
 from app.api.endpoints import language_detect, summarize, title
 from app.api.endpoints import rewrite

@@ -1,3 +1,5 @@
+"""Endpoint for detecting the language of input text."""
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, field_validator
 from app.services.language import detect_language
@@ -22,10 +24,13 @@ class LanguageDetectRequest(BaseModel):
 
 @router.post("/")
 async def language_detect(req: LanguageDetectRequest):
-    """
-    Detect the language of the given input text.
+    """Detect language of the provided input using langdetect.
 
-    Returns a language code (e.g., 'en', 'fr').
+    Args:
+        payload (LanguageDetectRequest): Text for detection.
+
+    Returns:
+        dict: Language code and confidence score.
     """
     try:
         language = detect_language(req.text)

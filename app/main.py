@@ -1,3 +1,5 @@
+"""Main application entry point for the Cleartext API."""
+
 import asyncio
 import random
 from dotenv import load_dotenv
@@ -26,6 +28,7 @@ app = FastAPI(
 
 @app.get("/", include_in_schema=False)
 async def block_root():
+    """Return a 404 plaintext response with anti-probe headers."""
     await asyncio.sleep(random.uniform(0.05, 0.2))  # Anti-probe jitter
     headers = {
         "X-Robots-Tag": "noindex, nofollow",
