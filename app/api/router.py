@@ -1,10 +1,11 @@
 """API router that aggregates all endpoint routes."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.api.endpoints import language_detect, summarize, title
 from app.api.endpoints import rewrite
+from app.core.security import verify_internal_api_key
 
-api_router = APIRouter()
+api_router = APIRouter(dependencies=[Depends(verify_internal_api_key)])
 
 api_router.include_router(summarize.router, prefix="/summarize", tags=["Summarize"])
 

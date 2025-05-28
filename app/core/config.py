@@ -1,22 +1,24 @@
-"""App configuration loaded from environment variables."""
-
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings:
+class Settings(BaseSettings):
     """Typed settings for accessing environment variables."""
 
-    ENV: str = os.getenv("ENV", "development")
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
-    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "gemini").lower()
+    ENV: str = Field(default="development")
+    GEMINI_API_KEY: str = Field(default="")
+    OPENAI_API_KEY: str = Field(default="")
+    LLM_PROVIDER: str = Field(default="gemini")
+    INTERNAL_API_KEY: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_prefix="",  # Allow exact match of variable names
+        extra="ignore",
+    )
 
     @property
     def docs_enabled(self) -> bool:
-        """Flag to check if API docs should be enabled (dev only)."""
         return self.ENV == "development"
 
 
