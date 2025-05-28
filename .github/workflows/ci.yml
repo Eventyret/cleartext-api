@@ -44,3 +44,6 @@ jobs:
           PYTHONPATH=. pytest -v
         env:
           PYTHONPATH: .
+          INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          LLM_PROVIDER: gemini
