@@ -28,7 +28,16 @@ jobs:
         run: uv pip install -r requirements.txt
 
       - name: Lint with Ruff
-        run: uv pip install ruff && ruff check .
+        run: ruff check .
 
-      - name: Run tests
-        run: pytest
+      - name: Check code formatting with Ruff
+        run: ruff format --check .
+
+      - name: Check docstring style with pydocstyle
+        run: pydocstyle --convention=google app/
+
+      - name: Run tests with pytest
+        run: |
+          PYTHONPATH=. pytest -v
+        env:
+          PYTHONPATH: .
