@@ -19,13 +19,16 @@ jobs:
         with:
           python-version: "3.13.3"
 
-      - name: Install uv
-        run: |
-          curl -Ls https://astral.sh/uv/install.sh | bash
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-      - name: Install dependencies with uv
-        run: uv pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Lint with Ruff
         run: ruff check .
