@@ -1,11 +1,7 @@
-from fastapi.testclient import TestClient
 from unittest.mock import patch
-from app.main import app
-
-client = TestClient(app)
 
 
-def test_summarize_endpoint():
+def test_summarize_endpoint(client):
     with patch(
         "app.api.endpoints.summarize.summarize",
         return_value={"summary": "Mock summary", "provider": "mock"},
@@ -20,7 +16,7 @@ def test_summarize_endpoint():
         assert json_data["provider"] == "mock"
 
 
-def test_summarize_invalid_length():
+def test_summarize_invalid_length(client):
     response = client.post(
         "/summarize/", json={"text": "This is test text.", "length": "gigantic"}
     )
@@ -29,6 +25,6 @@ def test_summarize_invalid_length():
     assert "detail" in json_data
 
 
-def test_summarize_missing_text():
+def test_summarize_missing_text(client):
     response = client.post("/summarize/", json={"length": "short"})
     assert response.status_code == 422

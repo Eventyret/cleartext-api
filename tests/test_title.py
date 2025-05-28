@@ -1,11 +1,7 @@
-from fastapi.testclient import TestClient
-from unittest.mock import patch, Mock
-from app.main import app
-
-client = TestClient(app)
+from unittest.mock import Mock, patch
 
 
-def test_title_generates_successfully():
+def test_title_generates_successfully(client):
     with patch(
         "app.api.endpoints.title.generate_title", return_value="Mocked Title"
     ) as mock_gen:
@@ -15,7 +11,7 @@ def test_title_generates_successfully():
         mock_gen.assert_called_once()
 
 
-def test_title_rejects_empty_input_early():
+def test_title_rejects_empty_input_early(client):
     mock = Mock()
     with patch("app.api.endpoints.title.generate_title", new=mock):
         response = client.post("/title/", json={"text": ""})
@@ -23,7 +19,7 @@ def test_title_rejects_empty_input_early():
         mock.assert_not_called()
 
 
-def test_title_fails_when_providers_exhausted():
+def test_title_fails_when_providers_exhausted(client):
     with patch(
         "app.api.endpoints.title.generate_title",
         side_effect=Exception("All providers failed"),
